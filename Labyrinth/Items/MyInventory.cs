@@ -9,6 +9,6 @@
         /// <summary>
         /// Item in the inventory, or null if empty.
         /// </summary>
-        public ICollectable? Item => _item;
+        public IEnumerable<ICollectable>? Items => _items;
     }
 }
