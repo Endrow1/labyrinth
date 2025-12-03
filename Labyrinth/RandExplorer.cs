@@ -25,10 +25,13 @@ namespace Labyrinth
             {
                 EventHandler<CrawlingEventArgs>? changeEvent;
 
-                if (_crawler.FacingTile.IsTraversable
-                    && _rnd.Next() == Actions.Walk)
-                {
-                    _crawler.Walk().SwapItems(bag);
+                if (_crawler.FacingTile.IsTraversable && _rnd.Next() == Actions.Walk) {
+                    var tile = _crawler.Walk();
+                    if (tile.HasItems) {
+                        while (tile.HasItems) {
+                            bag.MoveItemFrom(tile);
+                        }
+                    }
                     changeEvent = PositionChanged;
                 }
                 else
@@ -39,7 +42,9 @@ namespace Labyrinth
                 if (_crawler.FacingTile is Door door && door.IsLocked
                     && bag.HasItems && bag.ItemTypes.First() == typeof(Key))
                 {
-                    door.Open(bag);
+                    for (int i = 0; i < bag.ItemCount && door.IsLocked && bag.HasItems; i++) {
+                        door.Open(bag);
+                    }
                 }
                 changeEvent?.Invoke(this, new CrawlingEventArgs(_crawler));
             }

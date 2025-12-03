@@ -15,6 +15,12 @@ namespace Labyrinth.Items
         /// </summary>
         [MemberNotNullWhen(true, nameof(_items))]
         public bool HasItems => _items is { Count: > 0 };
+        
+        /// <summary>
+        /// Number of items in the inventory.
+        /// </summary>
+        public int ItemCount => _items?.Count ?? 0;
+        
 
         /// <summary>
         /// Gets the type of the item in the room.
@@ -39,15 +45,5 @@ namespace Labyrinth.Items
             from._items.RemoveAt(nth);
             _items.Add(item);
         }
-
-        /// <summary>
-        /// Swaps items between inventories (if any)
-        /// </summary>
-        /// <param name="from">The inventory to swap item from</param>
-        public void SwapItems(Inventory from)
-        {
-            (_items, from._items) = (from._items, _items);
-        }
-
     }
 }

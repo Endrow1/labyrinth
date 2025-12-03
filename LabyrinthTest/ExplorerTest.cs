@@ -295,8 +295,9 @@ public class ExplorerTest
             out var events,
             Actions.Walk,// key
             Actions.Walk,
-            Actions.Walk,// swap keys
+            Actions.Walk,// get other key
             Actions.Walk // door
+            
         );
         var left = test.GetOut(10);
 
@@ -304,5 +305,29 @@ public class ExplorerTest
         Assert.That(events.DirectionChangedCount, Is.EqualTo(3));
         Assert.That(events.PositionChangedCount , Is.EqualTo(4));
         Assert.That(events.LastArgs, Is.EqualTo((3, 2, Direction.East)));
+    }
+    
+    [Test]
+    public void GetOutPassingDoorWithMultipleKeysInInventory()
+    {
+        var test = NewExplorerFor("""
+                                  +-/-+
+                                  | k |
+                                  | k |
+                                  | k |
+                                  |/x/|
+                                  +---+
+                                  """,
+            out var events,
+            Actions.Walk, // pick key 1
+            Actions.Walk, // pick key 2
+            Actions.Walk, // pick key 3
+            Actions.Walk
+        );
+
+        var getOut = test.GetOut(5);
+        
+        Assert.That(getOut, Is.EqualTo(1));
+        Assert.That(events.LastArgs, Is.EqualTo((2, 0, Direction.North)));
     }
 }

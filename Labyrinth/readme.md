@@ -87,4 +87,31 @@ Après correction de l’algorithme et mise à jour des tests :
 On peut passer à la suite
 
 ----------
+# Partie 3 : 
 
+## RandExplorer.cs
+
+### Gestion de l'inventaire avec plusieurs items
+Le RandExplorer a été adapté pour récupérer tous les items présents dans une Room. On utilise une boucle while pour les prendre un par un :
+```C#
+while (tile.HasItems) {
+    bag.MoveItemFrom(tile);
+}
+```
+### Plusieurs clés dans le labyrinthe
+Pour tester toutes les clés, on utilise une boucle for. Comme la porte ne prend que le premier item de l’inventaire puis le replace à la fin, il suffit d’appeler la porte autant de fois qu’on a d’items pour tout tester
+```C#
+    for (int i = 0; i < count && door.IsLocked && bag.HasItems; i++)
+```
+
+Cette méthode fonctionne bien car notre inventaire contient uniquement des clés. Si on devait ajouter d’autres types d’items (potions, armes…), il faudrait vérifier que l’item transmis à la porte est bien une clé avant de l’utiliser.
+
+On aurait aussi pu modifier la porte pour qu’elle teste toutes les clés, mais il me semble plus logique que ce soit l’explorateur qui essaie ses items.
+
+## Tests
+
+Tous les tests existants passent toujours correctement, ce qui confirme le bon fonctionnement du refactoring.
+
+On ne peut pas encore tester le cas où plusieurs clés se trouvent dans la même Room, car le générateur crée toujours une seule clé par labyrinthe.
+
+Le test GetOutPassingTwoKeysBeforeDoors() fonctionne également avec la nouvelle logique : l’explorateur prend bien les deux clés et le test passe, tout est donc correct.
